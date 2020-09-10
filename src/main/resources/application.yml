@@ -1,0 +1,6 @@
+# 指定flyway脚本位置
+spring.flyway.locations: classpath:/db/migration
+# 打开flyway执行日志
+logging.level.org.flywaydb: debug
+
+spring.profiles.include: dev
