@@ -17,7 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <jooq.generator.dir>${project.build.directory}/generated-sources</jooq.generator.dir>
-        <jooq.generator.package>com.swnote.jooq.generator</jooq.generator.package>
+        <jooq.generator.package>com.getouo.frameworks.jooq.generator</jooq.generator.package>
     </properties>
 
     <dependencies>
