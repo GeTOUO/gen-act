@@ -1,4 +1,4 @@
-package com.getouo.frameworks;
+package com.getouo.frameworks.configuration;
 
 import org.jooq.Transaction;
 import org.springframework.transaction.TransactionStatus;
