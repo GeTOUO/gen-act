@@ -13,6 +13,9 @@ import static com.getouo.frameworks.filter.ServletExceptionCaughtFilter.EXCEPTIO
 @RestController
 public final class RethrowController {
 
+    private static final String EX = "错误的访问或定向到: '" + ERROR_RETHROW_PATH + "'. 非异常请求:" +
+            "attr[" + EXCEPTION_ATTRIBUTE + "] = ";
+
     protected final Log logger = LogFactory.getLog(this.getClass());
 
     /**
@@ -24,8 +27,7 @@ public final class RethrowController {
         if (exceptionState != null && exceptionState instanceof Throwable) {
             throw (Throwable) exceptionState;
         } else {
-            logger.warn("错误的访问或定向到: '" + ERROR_RETHROW_PATH + "'. 非异常请求:" +
-                    "attr[" + EXCEPTION_ATTRIBUTE + "] = " + exceptionState + "; [request] = " + request);
+            logger.warn(EX + exceptionState + "; [request] = " + request);
         }
     }
 }
