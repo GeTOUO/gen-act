@@ -9,6 +9,7 @@ import org.jooq.impl.DSL;
 import org.jooq.impl.DataSourceConnectionProvider;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultTransactionProvider;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,8 @@ import static com.getouo.frameworks.jooq.generator.tables.DictDetail.DICT_DETAIL
 
 // 便于测试， 跳过service
 //@org.springframework.stereotype.Service
-@RestController
+//@RestController
+@Service
 public class ServiceOrController {
 
     //    @Autowired

@@ -11,6 +11,8 @@ import org.jooq.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.protobuf.ProtobufJsonFormatHttpMessageConverter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -104,6 +106,10 @@ public class FrameworksApplication {
         return dictTypeListMap;
     }
 
+    @Bean
+    public ProtobufJsonFormatHttpMessageConverter protobufJsonFormatHttpMessageConverter() {
+        return new ProtobufJsonFormatHttpMessageConverter();
+    }
     public static void main(String[] args) {
         SpringApplication.run(FrameworksApplication.class, args);
     }

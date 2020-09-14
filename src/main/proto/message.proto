@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package com.getouo.msgtest;
+
+message ServiceStatus {
+    int32 code = 1;
+    string reason = 2;
+}
+
+message Response {
+    ServiceStatus status = 1;
+    bool isPaged = 2;
+    string err = 3;
+}

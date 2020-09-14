@@ -24,10 +24,7 @@ public final class RethrowController {
     @RequestMapping(ERROR_RETHROW_PATH)
     public void rethrow(HttpServletRequest request) throws Throwable {
         Object exceptionState = request.getAttribute(EXCEPTION_ATTRIBUTE);
-        if (exceptionState != null && exceptionState instanceof Throwable) {
-            throw (Throwable) exceptionState;
-        } else {
-            logger.warn(EX + exceptionState + "; [request] = " + request);
-        }
+        if (exceptionState instanceof Throwable) throw (Throwable) exceptionState;
+        else logger.warn(EX + exceptionState + "; [request] = " + request);
     }
 }
