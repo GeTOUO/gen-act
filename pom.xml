@@ -80,6 +80,11 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -139,6 +144,7 @@
                 </executions>
                 <configuration>
                     <!-- 此处的信息是读取的application.yml中的信息 -->
+                    <driver>${spring.datasource.driver}</driver>
                     <url>${spring.datasource.url}</url>
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>

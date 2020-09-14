@@ -25,7 +25,7 @@ public class HttpFilterConfiguration {
     @ConditionalOnBean(ServletExceptionCaughtFilter.class)
     // @ConditionalOnMissingFilterBean
     public FilterRegistrationBean<Filter> registerExceptionFilter(ServletExceptionCaughtFilter filter) {
-        FilterRegistrationBean<Filter> bean = new FilterRegistrationBean();
+        FilterRegistrationBean<Filter> bean = new FilterRegistrationBean<>();
         bean.setFilter(filter);
         bean.addUrlPatterns("/*");
         bean.setAsyncSupported(true);

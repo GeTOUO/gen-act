@@ -1,6 +1,8 @@
 package com.getouo.frameworks.filter;
 
+import com.getouo.frameworks.ResponseForbiddenWrap;
 import com.getouo.msgtest.Message;
+import com.google.protobuf.Any;
 import com.google.protobuf.MessageLite;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -16,7 +18,9 @@ public class ProtoResponseBodyAwareAdvice implements ResponseBodyAdvice<Object> 
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
 //        methodParameter.getMethod()
         Class<?> returnBodyType = methodParameter.getParameterType();
-        return methodParameter.getParameterIndex() == -1
+        boolean fixed = methodParameter.hasMethodAnnotation(ResponseForbiddenWrap.class);
+        System.err.println("has fixed" + fixed);
+        return !fixed && methodParameter.getParameterIndex() == -1
                 && MessageLite.class.isAssignableFrom(returnBodyType)
                 && !Message.Response.class.isAssignableFrom(returnBodyType);
     }
@@ -24,7 +28,8 @@ public class ProtoResponseBodyAwareAdvice implements ResponseBodyAdvice<Object> 
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
         if (o instanceof MessageLite && !(o instanceof Message.Response)) {
-            return Message.Response.newBuilder().setStatus(Message.ServiceStatus.newBuilder().build()).setErr(o.toString()).build();
+            Any hrl = Any.pack(Message.ServiceStatus.newBuilder().setCode(123).setReason("hrl").build());
+            return Message.Response.newBuilder().setContent(hrl).setReason("OK").build();
         }
         return o;
     }

@@ -7,6 +7,10 @@ import com.getouo.frameworks.jooq.generator.tables.pojos.DictDetail;
 import com.getouo.frameworks.jooq.generator.tables.pojos.DictType;
 import com.getouo.frameworks.jooq.generator.tables.records.DictDetailRecord;
 import com.getouo.frameworks.jooq.generator.tables.records.DictTypeRecord;
+import com.getouo.frameworks.util.PackageScanner;
+import com.google.protobuf.Descriptors;
+import com.google.protobuf.Message;
+import com.google.protobuf.util.JsonFormat;
 import org.jooq.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @SpringBootApplication
@@ -108,7 +113,17 @@ public class FrameworksApplication {
 
     @Bean
     public ProtobufJsonFormatHttpMessageConverter protobufJsonFormatHttpMessageConverter() {
-        return new ProtobufJsonFormatHttpMessageConverter();
+        JsonFormat.TypeRegistry.Builder builder = JsonFormat.TypeRegistry.newBuilder();
+
+        Set<Class<? extends Message>> classes = PackageScanner.loadClass("com.getouo.msgtest", Message.class);
+        Set<Descriptors.Descriptor> descriptors = PackageScanner.loadProtoMessageDescriptors(classes);
+        builder.add(descriptors);
+        JsonFormat.TypeRegistry typeRegistry = builder.build();
+        JsonFormat.Parser parser = JsonFormat.parser().usingTypeRegistry(typeRegistry);
+        JsonFormat.Printer printer = JsonFormat.printer().usingTypeRegistry(typeRegistry)
+                .includingDefaultValueFields();
+
+        return new ProtobufJsonFormatHttpMessageConverter(parser, printer);
     }
     public static void main(String[] args) {
         SpringApplication.run(FrameworksApplication.class, args);

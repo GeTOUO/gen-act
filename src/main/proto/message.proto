@@ -2,13 +2,16 @@ syntax = "proto3";
 
 package com.getouo.msgtest;
 
+import "google/protobuf/any.proto";
+
 message ServiceStatus {
     int32 code = 1;
     string reason = 2;
 }
 
 message Response {
-    ServiceStatus status = 1;
-    bool isPaged = 2;
-    string err = 3;
+    int32 status_code = 1;
+    string reason = 2;
+    google.protobuf.Any content = 3; // 响应数据;
+    string path = 4;
 }
