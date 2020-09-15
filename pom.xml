@@ -150,6 +150,7 @@
                     <password>${spring.datasource.password}</password>
                     <locations>
                         <location>filesystem:src/main/resources/db/migration</location>
+                        <location>classpath:db/migration</location>
                     </locations>
                 </configuration>
             </plugin>
@@ -177,6 +178,7 @@
                                     <name>${generator.database.name}</name>
                                     <includes>.*</includes>
                                     <excludes>flyway_schema_history</excludes>
+<!--                                    <excludes>${spring.flyway.table}</excludes>-->
                                     <!-- 连接的是数据库中jooq模式 -->
                                     <inputSchema>PUBLIC</inputSchema>
                                 </database>
@@ -184,11 +186,11 @@
                                     <deprecated>false</deprecated>
                                     <instanceFields>true</instanceFields>
                                     <pojos>true</pojos>
+                                    <pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>
                                     <daos>true</daos>
                                     <interfaces>true</interfaces>
                                     <!--在生成的代码中添加spring注释，比如@Repository-->
                                     <springAnnotations>true</springAnnotations>
-
                                 </generate>
                                 <target>
                                     <!-- 指定自动生成代码的位置 -->
@@ -220,12 +222,14 @@
                     <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
                     <pluginId>grpc-java</pluginId>
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+                    <protoSourceRoot>src/main/proto</protoSourceRoot> <!--proto位置-->
+
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>compile</goal>
-                            <goal>compile-custom</goal>
+                            <goal>compile</goal> <!--编译消息对象-->
+                            <goal>compile-custom</goal> <!--依赖消息对象,生成接口服务-->
                         </goals>
                     </execution>
                 </executions>

@@ -3,7 +3,6 @@ package com.getouo.frameworks.filter;
 import com.getouo.frameworks.ResponseForbiddenWrap;
 import com.getouo.msgtest.Message;
 import com.google.protobuf.Any;
-import com.google.protobuf.MessageLite;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -12,24 +11,45 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+
 @ControllerAdvice
 public class ProtoResponseBodyAwareAdvice implements ResponseBodyAdvice<Object> {
+
+    private final Map<Method, Boolean> supportsCache = new WeakHashMap<>();
+
+    private boolean check(MethodParameter methodParameter) {
+        final Method method = methodParameter.getMethod();
+        return supportsCache.computeIfAbsent(method, m -> {
+            try {
+                assert m != null;
+                Class<?> returnType = m.getReturnType();
+                boolean fixed = methodParameter.hasMethodAnnotation(ResponseForbiddenWrap.class);
+                return !fixed // 非限定返回类型
+                        && methodParameter.getParameterIndex() == -1 // 是返回值描述
+                        && com.google.protobuf.Message.class.isAssignableFrom(returnType) // proto 消息类
+                        && !Message.Response.class.isAssignableFrom(returnType); // 并非返回包装类型
+            } catch (Throwable tx) {
+                return false;
+            }
+        });
+    }
+
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
-//        methodParameter.getMethod()
-        Class<?> returnBodyType = methodParameter.getParameterType();
-        boolean fixed = methodParameter.hasMethodAnnotation(ResponseForbiddenWrap.class);
-        System.err.println("has fixed" + fixed);
-        return !fixed && methodParameter.getParameterIndex() == -1
-                && MessageLite.class.isAssignableFrom(returnBodyType)
-                && !Message.Response.class.isAssignableFrom(returnBodyType);
+        return check(methodParameter);
     }
 
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
-        if (o instanceof MessageLite && !(o instanceof Message.Response)) {
-            Any hrl = Any.pack(Message.ServiceStatus.newBuilder().setCode(123).setReason("hrl").build());
-            return Message.Response.newBuilder().setContent(hrl).setReason("OK").build();
+        List<String> wrap = serverHttpRequest.getHeaders().get("wrap");
+        if (wrap != null && wrap.size() > 0) return o;
+        if (o instanceof com.google.protobuf.Message && !(o instanceof Message.Response)) {
+            Any hrl = Any.pack((com.google.protobuf.Message) o);
+            return Message.Response.newBuilder().setPath(serverHttpRequest.getURI().getPath()).setContent(hrl).setReason("OK").build();
         }
         return o;
     }

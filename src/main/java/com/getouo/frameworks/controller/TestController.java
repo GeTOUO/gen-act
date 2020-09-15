@@ -62,7 +62,7 @@ public class TestController {
 
 //    @FixedResponseBody
     @RequestMapping("/gettt")
-    @ResponseForbiddenWrap
+//    @ResponseForbiddenWrap
     public Message.ServiceStatus getTypeOnly2(String typeCode) {
         return Message.ServiceStatus.newBuilder().setCode(100).setReason("200").build();
     }
