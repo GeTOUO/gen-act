@@ -1,6 +1,15 @@
+
 # 指定flyway脚本位置
 spring.flyway.locations: classpath:/db/migration
 # 打开flyway执行日志
 logging.level.org.flywaydb: debug
 
 spring.profiles.include: dev
+server:
+  port: 8800
+
+spring.cloud.nacos.config.server-addr: 192.168.2.19:8848
+
+spring.application.name: exampleframework
+
+spring.cloud.nacos.discovery.server-addr: 192.168.2.19:8848
