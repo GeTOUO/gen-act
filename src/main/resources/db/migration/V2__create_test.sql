@@ -3,7 +3,7 @@
 -- Table structure for dict_type
 -- ----------------------------
 DROP TABLE IF EXISTS `dict_type`;
-CREATE TABLE `dict_type` (
+CREATE TABLE IF NOT EXISTS `dict_type` (
   `dict_type_code` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '字典类型名称',
   `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '字典类型描述',
@@ -13,7 +13,7 @@ CREATE TABLE `dict_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='字典类型表';
 
 DROP TABLE IF EXISTS `dict_detail`;
-CREATE TABLE `dict_detail` (
+CREATE TABLE IF NOT EXISTS `dict_detail` (
   `id` varchar(255) NOT NULL,
   `dict_type_id` varchar(255) NOT NULL COMMENT '字典类型外键',
   `name` varchar(255) NOT NULL COMMENT '字典明细名称',
