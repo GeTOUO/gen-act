@@ -3,6 +3,7 @@ package com.getouo.frameworks.filter;
 import com.getouo.frameworks.ResponseForbiddenWrap;
 import com.getouo.msgtest.Message;
 import com.google.protobuf.Any;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -11,6 +12,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +23,15 @@ public class ProtoResponseBodyAwareAdvice implements ResponseBodyAdvice<Object> 
 
     private final Map<Method, Boolean> supportsCache = new WeakHashMap<>();
 
+    @Autowired
+    HttpServletRequest request;
     private boolean check(MethodParameter methodParameter) {
         final Method method = methodParameter.getMethod();
         return supportsCache.computeIfAbsent(method, m -> {
             try {
                 assert m != null;
                 Class<?> returnType = m.getReturnType();
+                System.err.println("suppo: " + returnType + "? " + request.getRequestURI());
                 boolean fixed = methodParameter.hasMethodAnnotation(ResponseForbiddenWrap.class);
                 return !fixed // 非限定返回类型
                         && methodParameter.getParameterIndex() == -1 // 是返回值描述
@@ -45,6 +50,7 @@ public class ProtoResponseBodyAwareAdvice implements ResponseBodyAdvice<Object> 
 
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
+        System.err.println("thee : " + serverHttpRequest.getURI());
         List<String> wrap = serverHttpRequest.getHeaders().get("wrap");
         if (wrap != null && wrap.size() > 0) return o;
         if (o instanceof com.google.protobuf.Message && !(o instanceof Message.Response)) {

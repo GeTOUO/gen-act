@@ -4,6 +4,7 @@ import com.getouo.frameworks.util.PackageScanner;
 import com.getouo.msgtest.Message;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.util.JsonFormat;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -61,6 +62,7 @@ public class FrameworksApplication {
             this.restTemplate = restTemplate;
         }
 
+        @GlobalTransactional
         @RequestMapping(value = "/echo/{str}", method = RequestMethod.GET)
         public com.getouo.msgtest.Message.User echo(@PathVariable String str) {
 

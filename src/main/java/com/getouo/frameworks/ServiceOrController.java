@@ -55,12 +55,14 @@ public class ServiceOrController {
         this.dataSource = dataSource;
     }
 
-    @RequestMapping("/addt")
+    //    @RequestMapping("/addt")
+    @Transactional
     public void addDictType(DictType dt) {
         typeDao.insert(dt);
     }
 
-    @RequestMapping("/addd")
+    //    @RequestMapping("/addd")
+    @Transactional
     public void addDictDetail(DictDetail detail) {
         detailDao.insert(detail);
     }
@@ -69,6 +71,7 @@ public class ServiceOrController {
     public void delDictType(String typeCode) {
         typeDao.deleteById(typeCode);
     }
+
     @RequestMapping("/deltf")
     public void delDictTypeForce(String typeCode) {
         typeDao.deleteById(typeCode);

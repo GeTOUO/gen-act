@@ -1,14 +1,15 @@
 package com.getouo.frameworks.controller;
 
-import com.getouo.frameworks.ResponseForbiddenWrap;
 import com.getouo.frameworks.ServiceOrController;
 import com.getouo.frameworks.jooq.generator.tables.pojos.DictDetail;
 import com.getouo.frameworks.jooq.generator.tables.pojos.DictType;
 import com.getouo.msgtest.Message;
 import com.google.protobuf.Any;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -17,18 +18,46 @@ import java.util.Map;
 public class TestController {
 
     private final ServiceOrController service;
+    private final RestTemplate restTemplate;
 
-    public TestController(ServiceOrController service) {
+    public TestController(ServiceOrController service, RestTemplate restTemplate) {
         this.service = service;
+        this.restTemplate = restTemplate;
     }
 
+
+
+    @GlobalTransactional
+    @Transactional
+    @RequestMapping("/adda")
+    public void startTrans() {
+
+        Void forObject1 = restTemplate.getForObject("http://exampleframework/addt", Void.class);
+        Void forObject2 = restTemplate.getForObject("http://exampleframework/addd", Void.class);
+
+//        service.addDictType(dt);
+    }
+
+    private String code = "cc1";
+
+    @GlobalTransactional
     @RequestMapping("/addt")
     public void addDictType(DictType dt) {
+
+        DictType dictType = new DictType();
+        dictType.setDictTypeCode(code);
+        dt = dictType;
         service.addDictType(dt);
     }
 
+
+    @GlobalTransactional
     @RequestMapping("/addd")
     public void addDictDetail(DictDetail detail) {
+        detail = new DictDetail();
+
+        detail.setDictTypeId(code); //
+        detail.setName("yo");
         service.addDictDetail(detail);
     }
 
@@ -36,6 +65,7 @@ public class TestController {
     public void delDictType(String typeCode) {
         service.delDictType(typeCode);
     }
+
     @RequestMapping("/deltf")
     public void delDictTypeForce(String typeCode) {
         service.delDictTypeForce(typeCode);

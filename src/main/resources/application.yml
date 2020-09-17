@@ -26,11 +26,11 @@ spring.cloud.nacos.discovery.server-addr: 127.0.0.1:8848
 seata:
   enabled: true
   application-id: ${spring.application.name}
-#  tx-service-group: my_test_tx_group
+  tx-service-group: my_test_tx_group
   enable-auto-data-source-proxy: true
   service:
-#    vgroup-mapping:
-#      my_test_tx_group: default
+    vgroup-mapping:
+      my_test_tx_group: default
     grouplist:
       default: 127.0.0.1:8091
   config:
