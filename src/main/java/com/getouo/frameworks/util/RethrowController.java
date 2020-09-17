@@ -1,6 +1,7 @@
 package com.getouo.frameworks.util;
 
-import com.getouo.frameworks.InvokeException;
+import com.getouo.frameworks.ServiceException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,15 +24,21 @@ public final class RethrowController {
 
     private final Log logger = LogFactory.getLog(this.getClass());
 
-    @ExceptionHandler(InvokeException.class)
-    public com.getouo.msgtest.Message.Response invokeException(InvokeException exception, final HttpServletRequest request) {
+    @ExceptionHandler(ServiceException.class)
+    public com.getouo.msgtest.Message.Response invokeException(ServiceException exception, final HttpServletRequest request) {
+        logger.info("catch ServiceException", exception);
         return com.getouo.msgtest.Message.Response.newBuilder()
                 .setPath(request.getServletPath()).setStatusCode(exception.statusCode).setReason(exception.reason).build();
     }
 
     @ExceptionHandler(Exception.class)
     public com.getouo.msgtest.Message.Response invokeException(Exception exception, final HttpServletRequest request) {
-        logger.debug("un catch server error", exception);
+//        String wrap = request.getHeader("wrap");
+//        if (!StringUtils.isEmpty(wrap)) {
+//
+//        }
+
+        logger.info("un catch server error", exception);
         return com.getouo.msgtest.Message.Response.newBuilder()
                 .setPath(request.getServletPath()).setStatusCode(500)
                 .setReason("un catch server error:" + exception.getMessage() + " of " + exception.getClass()).build();

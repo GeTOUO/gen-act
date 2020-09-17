@@ -3,6 +3,7 @@ syntax = "proto3";
 package com.getouo.msgtest;
 
 import "google/protobuf/any.proto";
+import "google/protobuf/wrappers.proto";
 
 message ServiceStatus {
     int32 code = 1;
@@ -15,3 +16,13 @@ message Response {
     google.protobuf.Any content = 3; // 响应数据;
     string path = 4;
 }
+
+message User {
+    int32 id = 1;
+    string username = 2;
+    string addr = 3;
+}
+
+//service UserRpcApi {
+//    rpc getHello (google.protobuf.StringValue) returns (User);
+//}
