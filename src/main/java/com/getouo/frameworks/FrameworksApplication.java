@@ -29,21 +29,6 @@ import java.util.Set;
 @EnableDiscoveryClient
 public class FrameworksApplication {
 
-//    @Bean
-//    public ProtobufJsonFormatHttpMessageConverter protobufJsonFormatHttpMessageConverter() {
-//        JsonFormat.TypeRegistry.Builder builder = JsonFormat.TypeRegistry.newBuilder();
-//
-//        Set<Class<? extends Message>> classes = PackageScanner.loadClass("com.getouo.msgtest", Message.class);
-//        Set<Descriptors.Descriptor> descriptors = PackageScanner.loadProtoMessageDescriptors(classes);
-//        builder.add(descriptors);
-//        JsonFormat.TypeRegistry typeRegistry = builder.build();
-//        JsonFormat.Parser parser = JsonFormat.parser().usingTypeRegistry(typeRegistry);
-//        JsonFormat.Printer printer = JsonFormat.printer().usingTypeRegistry(typeRegistry)
-//                .includingDefaultValueFields();
-//
-//        return new ProtobufJsonFormatHttpMessageConverter(parser, printer);
-//    }
-
     public static void main(String[] args) {
         SpringApplication.run(FrameworksApplication.class, args);
     }

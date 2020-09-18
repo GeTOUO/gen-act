@@ -257,6 +257,7 @@
                                     <excludes>flyway_schema_history</excludes>
 <!--                                    <excludes>${spring.flyway.table}</excludes>-->
                                     <!-- 连接的是数据库中jooq模式 -->
+<!--                                    <inputSchema>${jdbc.database.name}</inputSchema>-->
                                     <inputSchema>tttttt</inputSchema>
 <!--                                    <inputSchema>public</inputSchema>-->
 <!--                                    <inputSchema>${spring.datasource.name}</inputSchema>-->

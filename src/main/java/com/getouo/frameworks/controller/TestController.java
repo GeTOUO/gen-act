@@ -6,6 +6,7 @@ import com.getouo.frameworks.jooq.generator.tables.pojos.DictType;
 import com.getouo.msgtest.Message;
 import com.google.protobuf.Any;
 import io.seata.spring.annotation.GlobalTransactional;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,12 +28,18 @@ public class TestController {
 
 
 
+//    @Transactional
     @GlobalTransactional
-    @Transactional
     @RequestMapping("/adda")
     public void startTrans() {
 
-        Void forObject1 = restTemplate.getForObject("http://exampleframework/addt", Void.class);
+        try {
+            Void forObject1 = restTemplate.getForObject("http://exampleframework/addt", Void.class);
+        } catch (Exception e) {
+            System.err.println("eeeeee");
+            e.printStackTrace();
+        }
+
         Void forObject2 = restTemplate.getForObject("http://exampleframework/addd", Void.class);
 
 //        service.addDictType(dt);
@@ -40,18 +47,19 @@ public class TestController {
 
     private String code = "cc1";
 
-    @GlobalTransactional
+//    @GlobalTransactional
     @RequestMapping("/addt")
-    public void addDictType(DictType dt) {
+    public void addDictType(DictType dt) throws Exception {
 
         DictType dictType = new DictType();
         dictType.setDictTypeCode(code);
         dt = dictType;
         service.addDictType(dt);
+        throw new Exception("");
     }
 
 
-    @GlobalTransactional
+//    @GlobalTransactional
     @RequestMapping("/addd")
     public void addDictDetail(DictDetail detail) {
         detail = new DictDetail();
@@ -117,7 +125,6 @@ public class TestController {
         return service.getAllTypeDetails();
     }
 
-    @Transactional
     @RequestMapping("/updateall")
     public void allUpdate(ServiceOrController.UpdateAll all) {
         service.allUpdate(all);
