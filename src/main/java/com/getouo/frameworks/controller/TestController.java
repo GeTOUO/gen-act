@@ -1,13 +1,13 @@
 package com.getouo.frameworks.controller;
 
 import com.getouo.frameworks.ServiceOrController;
+import com.getouo.frameworks.api.IController;
 import com.getouo.frameworks.jooq.generator.tables.pojos.DictDetail;
 import com.getouo.frameworks.jooq.generator.tables.pojos.DictType;
 import com.getouo.msgtest.Message;
 import com.google.protobuf.Any;
 import io.seata.spring.annotation.GlobalTransactional;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -15,8 +15,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
-public class TestController {
+//@Primary
+public class TestController implements IController {
 
     private final ServiceOrController service;
     private final RestTemplate restTemplate;
@@ -26,28 +28,44 @@ public class TestController {
         this.restTemplate = restTemplate;
     }
 
+    @Autowired
+    ApiSupport iController;
 
-
-//    @Transactional
+    //    @Transactional
     @GlobalTransactional
     @RequestMapping("/adda")
-    public void startTrans() {
+    public void startTrans() throws Exception {
 
+        DictType dt = new DictType();
+        dt.setDictTypeCode("cc1");
+        dt.setName("haha");
+        dt.setEditable((byte) 1);
+        dt.setCreator("yo");
+        dt.setRemark("hi");
         try {
-            Void forObject1 = restTemplate.getForObject("http://exampleframework/addt", Void.class);
-        } catch (Exception e) {
-            System.err.println("eeeeee");
-            e.printStackTrace();
-        }
 
-        Void forObject2 = restTemplate.getForObject("http://exampleframework/addd", Void.class);
+            iController.addDictType(dt);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            throw e;
+        }
+        iController.addDictDetail(new DictDetail());
+
+//        try {
+//            Void forObject1 = restTemplate.getForObject("http://exampleframework/addt", Void.class);
+//        } catch (Exception e) {
+//            System.err.println("eeeeee");
+//            e.printStackTrace();
+//        }
+//
+//        Void forObject2 = restTemplate.getForObject("http://exampleframework/addd", Void.class);
 
 //        service.addDictType(dt);
     }
 
     private String code = "cc1";
 
-//    @GlobalTransactional
+    //    @GlobalTransactional
     @RequestMapping("/addt")
     public void addDictType(DictType dt) throws Exception {
 
@@ -55,11 +73,11 @@ public class TestController {
         dictType.setDictTypeCode(code);
         dt = dictType;
         service.addDictType(dt);
-        throw new Exception("");
+//        throw new Exception("");
     }
 
 
-//    @GlobalTransactional
+    //    @GlobalTransactional
     @RequestMapping("/addd")
     public void addDictDetail(DictDetail detail) {
         detail = new DictDetail();
@@ -98,7 +116,7 @@ public class TestController {
         return response;
     }
 
-//    @FixedResponseBody
+    //    @FixedResponseBody
     @RequestMapping("/gettt")
 //    @ResponseForbiddenWrap
     public Message.ServiceStatus getTypeOnly2(String typeCode) {

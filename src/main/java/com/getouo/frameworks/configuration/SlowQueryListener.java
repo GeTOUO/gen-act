@@ -23,7 +23,7 @@ class SlowQueryListener extends DefaultExecuteListener {
         try {
             super.executeEnd(ctx);
 //            if (watch.split() > 1_000_000_000L) {//记录执行时间超过1s的操作
-            if (watch.split() > 1_000_000_000L / 1000) {//记录执行时间超过1ms的操作
+            if (watch.split() > 1_000_000_000L / 100) {//记录执行时间超过10ms的操作
                 ExecuteType type = ctx.type();
                 StringBuffer sqlBuffer = new StringBuffer();
                 if (type == ExecuteType.BATCH) {

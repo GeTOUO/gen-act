@@ -1,5 +1,6 @@
 package com.getouo.frameworks;
 
+import com.getouo.frameworks.api.IController;
 import com.getouo.frameworks.util.PackageScanner;
 import com.getouo.msgtest.Message;
 import com.google.protobuf.Descriptors;
@@ -10,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Set;
 
+@EnableFeignClients
 @RestController
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -45,6 +48,13 @@ public class FrameworksApplication {
             restTemplate.getMessageConverters().forEach(System.err::println);
             System.err.println("rtrestTemplate:" + restTemplate);
             this.restTemplate = restTemplate;
+        }
+        @Autowired
+        IController iController;
+
+        @RequestMapping(value = "/voids", method = RequestMethod.GET)
+        public Object voids() {
+            return iController.getAllTypeOnly();
         }
 
         @GlobalTransactional
