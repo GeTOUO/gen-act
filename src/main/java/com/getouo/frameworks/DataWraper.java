@@ -17,4 +17,9 @@ public interface DataWraper {
         ;
 
     }
+
+    public static void main(String[] args) {
+        String hodgepodge = "";
+        System.err.println(hodgepodge);
+    }
 }

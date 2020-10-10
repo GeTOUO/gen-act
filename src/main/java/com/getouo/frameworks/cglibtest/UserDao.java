@@ -6,6 +6,12 @@ package com.getouo.frameworks.cglibtest;
 public class UserDao {
 
     public void save() {
-        System.out.println("----已经保存数据!----");
+        System.err.println("----savesavesavesavesavesavesavesavesavesave!----");
+        hello();
+    }
+
+    public String hello() {
+        System.err.println("----hellohellohellohellohellohellohellohellohellohello!----");
+        return "hellohellohellohellohellohellohellohellohellohello";
     }
 }

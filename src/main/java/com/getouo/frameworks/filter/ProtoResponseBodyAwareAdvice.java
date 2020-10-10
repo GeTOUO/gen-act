@@ -32,7 +32,7 @@ public class ProtoResponseBodyAwareAdvice implements ResponseBodyAdvice<Object> 
             try {
                 assert m != null;
                 Class<?> returnType = m.getReturnType();
-                System.err.println("suppo: " + returnType + "? " + request.getRequestURI());
+//                System.err.println("suppo: " + returnType + "? " + request.getRequestURI());
                 boolean fixed = methodParameter.hasMethodAnnotation(ResponseForbiddenWrap.class);
                 return !fixed // 非限定返回类型
                         && methodParameter.getParameterIndex() == -1 // 是返回值描述
